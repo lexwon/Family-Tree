@@ -1,0 +1,38 @@
+flowchart TD
+    subgraph wong_family["Wong Family"]
+        alexander["Alexander Wong<br/>Born 1981"]
+        winny["Winny Wong<br/>Born 1981"]
+        arya["Arya Wong<br/>Born 2017"]
+        kira["Kira Wong<br/>Born 2020"]
+
+        direction LR
+        alexander ---|"spouse"| winny
+
+        direction TB
+        alexander -->|"father"| arya
+        alexander -->|"father"| kira
+
+        direction TB
+        winny -->|"mother"| arya
+        winny -->|"mother"| kira
+    end
+
+    subgraph lo_wong_family["Lo-Wong Family"]
+        alex["Alex Lo<br/>Born 1987"]
+        jenny["Jenny Wong<br/>Born 1987"]
+        jordan["Jordan Lo<br/>Born 2020"]
+        jacob["Jacob Lo<br/>Born 2022"]
+
+        direction LR
+        alex ---|"spouse"| jenny
+
+        direction TB
+        alex -->|"father"| jordan
+        alex -->|"father"| jacob
+        
+        direction TB
+        jenny -->|"mother"| jordan
+        jenny -->|"mother"| jacob
+    end
+
+    winny ---|"sister"| jenny
