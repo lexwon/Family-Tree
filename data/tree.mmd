@@ -1,4 +1,10 @@
 flowchart TD
+    subgraph wong_ng_family["Wong Family"]
+        allen["Allen Sik-Ho Wong"]
+        emmi["Emmi Wai-Fung Wong"]
+        emma["Emma Wong<br/>Born 1984"]
+    end
+
     subgraph wong_family["Wong Family"]
         alexander["Alexander Wong<br/>Born 1981"]
         winny["Winny Wong<br/>Born 1981"]
@@ -16,6 +22,26 @@ flowchart TD
         winny -->|"mother"| arya
         winny -->|"mother"| kira
     end
+
+    allen ---|"spouse"| emmi
+    allen -->|"father"| alexander
+    allen -->|"father"| emma
+    emmi -->|"mother"| alexander
+    emmi -->|"mother"| emma
+    alexander ---|"brother"| emma
+
+    subgraph wong_ho_family["Wong Family"]
+        jimmy["Jimmy Wong"]
+        lan["Lan Wong"]
+
+        direction LR
+        jimmy ---|"spouse"| lan
+    end
+
+    jimmy -->|"father"| winny
+    jimmy -->|"father"| jenny
+    lan -->|"mother"| winny
+    lan -->|"mother"| jenny
 
     subgraph lo_wong_family["Lo-Wong Family"]
         alex["Alex Lo<br/>Born 1987"]
