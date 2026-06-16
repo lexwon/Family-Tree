@@ -6,13 +6,15 @@ The project is currently scoped to one family and will grow in stages, starting 
 
 ## Project Status
 
-This repository is currently in the first data-modelling phase.
+This repository is currently in the relationship-explanation phase.
 
 The initial plan is documented in [documentation/plan.md](documentation/plan.md).
 
 The source-of-truth Family Data lives in [data/family.json](data/family.json). It stores people, Parent-Child Facts, and Partnership Facts without display-only relationship labels such as mother, father, sibling, cousin, aunt, or uncle.
 
 The generated Mermaid inspection view lives in [data/tree.mmd](data/tree.mmd). Do not edit it by hand; regenerate it from the Family Data after data changes.
+
+The generated Relationship Explanations live in [data/relationship-explanations.json](data/relationship-explanations.json). Do not edit them by hand; regenerate them from the Family Data after data changes.
 
 ## Roadmap
 
@@ -31,6 +33,7 @@ The generated Mermaid inspection view lives in [data/tree.mmd](data/tree.mmd). D
 
 - Derive child-facing relationship explanations from Relationship Facts.
 - Support Arya and Kira as the first Focus People.
+- Generate Immediate Family and visible Cousin Family explanations from the Family Data.
 
 ### Step 4: React Application
 
@@ -61,7 +64,12 @@ The generated Mermaid inspection view lives in [data/tree.mmd](data/tree.mmd). D
 │   └── plan.md
 ├── data/
 │   ├── family.json
+│   ├── relationship-explanations.json
 │   └── tree.mmd
+├── scripts/
+│   ├── family-data.mjs
+│   ├── generate-mermaid.mjs
+│   └── generate-relationship-explanations.mjs
 └── README.md
 ```
 
@@ -85,4 +93,17 @@ Regenerate the Mermaid view after changing the Family Data:
 
 ```sh
 node scripts/generate-mermaid.mjs
+```
+
+Regenerate Relationship Explanations after changing the Family Data:
+
+```sh
+node scripts/generate-relationship-explanations.mjs
+```
+
+Generate explanations for one supported Focus Person:
+
+```sh
+node scripts/generate-relationship-explanations.mjs arya
+node scripts/generate-relationship-explanations.mjs kira
 ```
