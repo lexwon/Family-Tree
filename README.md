@@ -2,11 +2,11 @@
 
 A family tree application for helping children understand who they are talking to in the family and how each person is connected.
 
-The project is currently scoped to one family and will grow in stages, starting with a simple Mermaid diagram before moving toward a React application and a more interactive tree experience.
+The project is currently scoped to one family and includes a TypeScript React application for browsing the family tree from a selected Focus Person's point of view.
 
 ## Project Status
 
-This repository is currently in the relationship-explanation phase.
+This repository is currently in the first React application phase.
 
 The initial plan is documented in [documentation/plan.md](documentation/plan.md).
 
@@ -15,6 +15,8 @@ The source-of-truth Family Data lives in [data/family.json](data/family.json). I
 The generated Mermaid inspection view lives in [data/tree.mmd](data/tree.mmd). Do not edit it by hand; regenerate it from the Family Data after data changes.
 
 The generated Relationship Explanations live in [data/relationship-explanations.json](data/relationship-explanations.json). Do not edit them by hand; regenerate them from the Family Data after data changes.
+
+The React application derives its displayed relationships directly from [data/family.json](data/family.json), so the UI stays aligned with the source-of-truth Family Data.
 
 ## Roadmap
 
@@ -70,12 +72,19 @@ The generated Relationship Explanations live in [data/relationship-explanations.
 │   ├── family-data.mjs
 │   ├── generate-mermaid.mjs
 │   └── generate-relationship-explanations.mjs
+├── src/
+│   ├── main.tsx
+│   ├── relationshipEngine.ts
+│   └── styles.css
+├── index.html
+├── package.json
+├── pnpm-lock.yaml
+├── tsconfig.json
+├── vite.config.ts
 └── README.md
 ```
 
 ## Getting Started
-
-There is no application to run yet.
 
 Start by reading the project plan:
 
@@ -87,6 +96,24 @@ Then inspect or update the structured Family Data:
 
 ```text
 data/family.json
+```
+
+Install dependencies with pnpm:
+
+```sh
+pnpm install
+```
+
+Run the React application locally:
+
+```sh
+pnpm dev
+```
+
+Build the TypeScript React application:
+
+```sh
+pnpm build
 ```
 
 Regenerate the Mermaid view after changing the Family Data:
@@ -107,3 +134,9 @@ Generate explanations for one supported Focus Person:
 node scripts/generate-relationship-explanations.mjs arya
 node scripts/generate-relationship-explanations.mjs kira
 ```
+
+## GitHub Pages
+
+The app is configured for GitHub Pages with Vite's `base` set to `/Family-Tree/`.
+
+The deployment workflow lives in [.github/workflows/deploy.yml](.github/workflows/deploy.yml). It installs dependencies with pnpm, builds the app, and deploys the `dist` output to GitHub Pages when changes are pushed to `main` or when the workflow is run manually.
