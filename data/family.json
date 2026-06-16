@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "focusPersonIds": ["arya", "kira"],
+  "people": [
+    {
+      "id": "allen",
+      "displayName": "Allen Sik-Ho Wong"
+    },
+    {
+      "id": "emmi",
+      "displayName": "Emmi Wai-Fung Wong"
+    },
+    {
+      "id": "emma",
+      "displayName": "Emma Wong",
+      "birthYear": 1984
+    },
+    {
+      "id": "alexander",
+      "displayName": "Alexander Wong",
+      "birthYear": 1981
+    },
+    {
+      "id": "winny",
+      "displayName": "Winny Wong",
+      "birthYear": 1981
+    },
+    {
+      "id": "arya",
+      "displayName": "Arya Wong",
+      "birthYear": 2017
+    },
+    {
+      "id": "kira",
+      "displayName": "Kira Wong",
+      "birthYear": 2020
+    },
+    {
+      "id": "jimmy",
+      "displayName": "Jimmy Wong"
+    },
+    {
+      "id": "lan",
+      "displayName": "Lan Wong"
+    },
+    {
+      "id": "alex",
+      "displayName": "Alex Lo",
+      "birthYear": 1987
+    },
+    {
+      "id": "jenny",
+      "displayName": "Jenny Wong",
+      "birthYear": 1987
+    },
+    {
+      "id": "jordan",
+      "displayName": "Jordan Lo",
+      "birthYear": 2020
+    },
+    {
+      "id": "jacob",
+      "displayName": "Jacob Lo",
+      "birthYear": 2022
+    }
+  ],
+  "relationshipFacts": {
+    "parentChild": [
+      {
+        "parentId": "allen",
+        "childId": "alexander"
+      },
+      {
+        "parentId": "allen",
+        "childId": "emma"
+      },
+      {
+        "parentId": "emmi",
+        "childId": "alexander"
+      },
+      {
+        "parentId": "emmi",
+        "childId": "emma"
+      },
+      {
+        "parentId": "alexander",
+        "childId": "arya"
+      },
+      {
+        "parentId": "alexander",
+        "childId": "kira"
+      },
+      {
+        "parentId": "winny",
+        "childId": "arya"
+      },
+      {
+        "parentId": "winny",
+        "childId": "kira"
+      },
+      {
+        "parentId": "jimmy",
+        "childId": "winny"
+      },
+      {
+        "parentId": "jimmy",
+        "childId": "jenny"
+      },
+      {
+        "parentId": "lan",
+        "childId": "winny"
+      },
+      {
+        "parentId": "lan",
+        "childId": "jenny"
+      },
+      {
+        "parentId": "alex",
+        "childId": "jordan"
+      },
+      {
+        "parentId": "alex",
+        "childId": "jacob"
+      },
+      {
+        "parentId": "jenny",
+        "childId": "jordan"
+      },
+      {
+        "parentId": "jenny",
+        "childId": "jacob"
+      }
+    ],
+    "partnerships": [
+      {
+        "person1Id": "allen",
+        "person2Id": "emmi"
+      },
+      {
+        "person1Id": "alexander",
+        "person2Id": "winny"
+      },
+      {
+        "person1Id": "jimmy",
+        "person2Id": "lan"
+      },
+      {
+        "person1Id": "alex",
+        "person2Id": "jenny"
+      }
+    ]
+  }
+}

@@ -1,64 +1,41 @@
+%% This file is generated from data/family.json.
+%% Regenerate it with: node scripts/generate-mermaid.mjs
 flowchart TD
-    subgraph wong_ng_family["Wong Family"]
+
+    subgraph people["People"]
         allen["Allen Sik-Ho Wong"]
         emmi["Emmi Wai-Fung Wong"]
         emma["Emma Wong<br/>Born 1984"]
-    end
-
-    subgraph wong_family["Wong Family"]
         alexander["Alexander Wong<br/>Born 1981"]
         winny["Winny Wong<br/>Born 1981"]
         arya["Arya Wong<br/>Born 2017"]
         kira["Kira Wong<br/>Born 2020"]
-
-        direction LR
-        alexander ---|"spouse"| winny
-
-        direction TB
-        alexander -->|"father"| arya
-        alexander -->|"father"| kira
-
-        direction TB
-        winny -->|"mother"| arya
-        winny -->|"mother"| kira
-    end
-
-    allen ---|"spouse"| emmi
-    allen -->|"father"| alexander
-    allen -->|"father"| emma
-    emmi -->|"mother"| alexander
-    emmi -->|"mother"| emma
-    alexander ---|"brother"| emma
-
-    subgraph wong_ho_family["Wong Family"]
         jimmy["Jimmy Wong"]
         lan["Lan Wong"]
-
-        direction LR
-        jimmy ---|"spouse"| lan
-    end
-
-    jimmy -->|"father"| winny
-    jimmy -->|"father"| jenny
-    lan -->|"mother"| winny
-    lan -->|"mother"| jenny
-
-    subgraph lo_wong_family["Lo-Wong Family"]
         alex["Alex Lo<br/>Born 1987"]
         jenny["Jenny Wong<br/>Born 1987"]
         jordan["Jordan Lo<br/>Born 2020"]
         jacob["Jacob Lo<br/>Born 2022"]
-
-        direction LR
-        alex ---|"spouse"| jenny
-
-        direction TB
-        alex -->|"father"| jordan
-        alex -->|"father"| jacob
-        
-        direction TB
-        jenny -->|"mother"| jordan
-        jenny -->|"mother"| jacob
     end
 
-    winny ---|"sister"| jenny
+    allen ---|"partnership"| emmi
+    alexander ---|"partnership"| winny
+    jimmy ---|"partnership"| lan
+    alex ---|"partnership"| jenny
+    allen -->|"parent-child"| alexander
+    allen -->|"parent-child"| emma
+    emmi -->|"parent-child"| alexander
+    emmi -->|"parent-child"| emma
+    alexander -->|"parent-child"| arya
+    alexander -->|"parent-child"| kira
+    winny -->|"parent-child"| arya
+    winny -->|"parent-child"| kira
+    jimmy -->|"parent-child"| winny
+    jimmy -->|"parent-child"| jenny
+    lan -->|"parent-child"| winny
+    lan -->|"parent-child"| jenny
+    alex -->|"parent-child"| jordan
+    alex -->|"parent-child"| jacob
+    jenny -->|"parent-child"| jordan
+    jenny -->|"parent-child"| jacob
+
