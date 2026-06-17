@@ -11,13 +11,16 @@ import {
   getPersonAge,
   type FamilyData,
   type FocusView,
-  type Person,
   buildFamilyIndex,
 } from "../relationshipEngine";
 import { FamilyTreeNode, type FamilyTreeNodeData } from "./FamilyTreeNode";
 import { formatRelationship } from "./RelationshipSection";
 
 const treeNodeTypes = { person: FamilyTreeNode };
+const NODE_WIDTH = 190;
+const PARTNER_GAP = 34;
+const UNIT_GAP = 86;
+const ROW_GAP = 210;
 
 type ReactFlowTreePanelProps = {
   focusView: FocusView;
@@ -50,7 +53,6 @@ export function ReactFlowTreePanel({
         <div className="flow-legend" aria-label="Relationship line legend">
           <span className="legend-item legend-parent">Parent</span>
           <span className="legend-item legend-partner">Partner</span>
-          <span className="legend-item legend-derived">Focus link</span>
         </div>
       </Header>
 
@@ -95,36 +97,31 @@ function buildReactFlowTree(
   family: ReturnType<typeof buildFamilyIndex>,
 ): { nodes: Node<FamilyTreeNodeData>[]; edges: Edge[] } {
   const generationByPersonId = getGenerationByPersonId(familyData, family);
-  const peopleByGeneration = new Map<number, Person[]>();
+  const layoutUnits = buildLayoutUnits(familyData, generationByPersonId);
+  const positionedUnits = positionLayoutUnits(layoutUnits);
 
-  for (const person of familyData.people) {
-    const generation = generationByPersonId.get(person.id) ?? 0;
-    if (!peopleByGeneration.has(generation)) {
-      peopleByGeneration.set(generation, []);
-    }
+  const nodes: Node<FamilyTreeNodeData>[] = positionedUnits.flatMap((unit) => {
+    const unitLeft = unit.centerX - unit.width / 2;
 
-    peopleByGeneration.get(generation)?.push(person);
-  }
+    return unit.personIds.map((personId, index) => {
+      const person = family.person(personId);
 
-  const nodes: Node<FamilyTreeNodeData>[] = [...peopleByGeneration.entries()].flatMap(([generation, people]) => {
-    const sortedPeople = people.sort((left, right) => left.displayName.localeCompare(right.displayName));
-    const rowWidth = (sortedPeople.length - 1) * 230;
-
-    return sortedPeople.map((person, index) => ({
-      id: person.id,
-      type: "person",
-      position: {
-        x: index * 230 - rowWidth / 2,
-        y: generation * 190,
-      },
-      data: {
-        person,
-        age: getPersonAge(person),
-        isFocus: person.id === focusPersonId,
-        isHighlighted: highlightedPersonIds.has(person.id),
-        relationshipLabel: getRelationshipLabel(focusView, person.id),
-      },
-    }));
+      return {
+        id: person.id,
+        type: "person",
+        position: {
+          x: unitLeft + index * (NODE_WIDTH + PARTNER_GAP),
+          y: unit.generation * ROW_GAP,
+        },
+        data: {
+          person,
+          age: getPersonAge(person),
+          isFocus: person.id === focusPersonId,
+          isHighlighted: highlightedPersonIds.has(person.id),
+          relationshipLabel: getRelationshipLabel(focusView, person.id),
+        },
+      };
+    });
   });
 
   const parentChildEdges: Edge[] = familyData.relationshipFacts.parentChild.map(({ parentId, childId }) => ({
@@ -147,12 +144,159 @@ function buildReactFlowTree(
     className: "edge-partnership",
   }));
 
-  const derivedEdges: Edge[] = getDerivedFocusEdges(focusView, focusPersonId);
-
   return {
     nodes,
-    edges: [...partnershipEdges, ...parentChildEdges, ...derivedEdges],
+    edges: [...partnershipEdges, ...parentChildEdges],
   };
+}
+
+type LayoutUnit = {
+  id: string;
+  personIds: string[];
+  generation: number;
+  width: number;
+  centerX: number;
+  parentUnitIds: Set<string>;
+  childUnitIds: Set<string>;
+};
+
+function buildLayoutUnits(
+  familyData: FamilyData,
+  generationByPersonId: Map<string, number>,
+): LayoutUnit[] {
+  const unitsById = new Map<string, LayoutUnit>();
+  const unitIdByPersonId = new Map<string, string>();
+
+  for (const { person1Id, person2Id } of familyData.relationshipFacts.partnerships) {
+    const personIds = [person1Id, person2Id];
+    const unit = createLayoutUnit(personIds, generationByPersonId);
+
+    unitsById.set(unit.id, unit);
+    unitIdByPersonId.set(person1Id, unit.id);
+    unitIdByPersonId.set(person2Id, unit.id);
+  }
+
+  for (const person of familyData.people) {
+    if (unitIdByPersonId.has(person.id)) {
+      continue;
+    }
+
+    const unit = createLayoutUnit([person.id], generationByPersonId);
+    unitsById.set(unit.id, unit);
+    unitIdByPersonId.set(person.id, unit.id);
+  }
+
+  for (const { parentId, childId } of familyData.relationshipFacts.parentChild) {
+    const parentUnitId = unitIdByPersonId.get(parentId);
+    const childUnitId = unitIdByPersonId.get(childId);
+
+    if (!parentUnitId || !childUnitId || parentUnitId === childUnitId) {
+      continue;
+    }
+
+    const parentUnit = unitsById.get(parentUnitId);
+    const childUnit = unitsById.get(childUnitId);
+
+    parentUnit?.childUnitIds.add(childUnitId);
+    childUnit?.parentUnitIds.add(parentUnitId);
+  }
+
+  return [...unitsById.values()].sort((left, right) => {
+    if (left.generation !== right.generation) {
+      return left.generation - right.generation;
+    }
+
+    return left.id.localeCompare(right.id);
+  });
+}
+
+function createLayoutUnit(personIds: string[], generationByPersonId: Map<string, number>): LayoutUnit {
+  const generation = Math.max(...personIds.map((personId) => generationByPersonId.get(personId) ?? 0));
+
+  return {
+    id: personIds.join("+"),
+    personIds,
+    generation,
+    width: personIds.length * NODE_WIDTH + Math.max(0, personIds.length - 1) * PARTNER_GAP,
+    centerX: 0,
+    parentUnitIds: new Set(),
+    childUnitIds: new Set(),
+  };
+}
+
+function positionLayoutUnits(layoutUnits: LayoutUnit[]): LayoutUnit[] {
+  const unitsById = new Map(layoutUnits.map((unit) => [unit.id, unit]));
+  const generations = [...new Set(layoutUnits.map((unit) => unit.generation))].sort((left, right) => left - right);
+
+  for (const generation of generations) {
+    const units = layoutUnits.filter((unit) => unit.generation === generation);
+    placeUnits(units, units.map((_, index) => index * (NODE_WIDTH + PARTNER_GAP + UNIT_GAP)));
+  }
+
+  for (const generation of generations.slice().reverse()) {
+    const units = layoutUnits.filter((unit) => unit.generation === generation);
+    const desiredCenters = units.map((unit) => {
+      const childCenters = [...unit.childUnitIds]
+        .map((childUnitId) => unitsById.get(childUnitId)?.centerX)
+        .filter((center): center is number => center !== undefined);
+
+      return childCenters.length > 0 ? average(childCenters) : unit.centerX;
+    });
+
+    placeUnits(units, desiredCenters);
+  }
+
+  for (const generation of generations) {
+    const units = layoutUnits.filter((unit) => unit.generation === generation);
+    const desiredCenters = units.map((unit) => {
+      const parentCenters = [...unit.parentUnitIds]
+        .map((parentUnitId) => unitsById.get(parentUnitId)?.centerX)
+        .filter((center): center is number => center !== undefined);
+
+      return parentCenters.length > 0 ? average(parentCenters) : unit.centerX;
+    });
+
+    placeUnits(units, desiredCenters);
+  }
+
+  return layoutUnits;
+}
+
+function placeUnits(units: LayoutUnit[], desiredCenters: number[]): void {
+  const desiredCenterByUnitId = new Map(units.map((unit, index) => [unit.id, desiredCenters[index] ?? unit.centerX]));
+  const sortedUnits = [...units].sort((left, right) => {
+    const leftDesiredCenter = desiredCenterByUnitId.get(left.id) ?? 0;
+    const rightDesiredCenter = desiredCenterByUnitId.get(right.id) ?? 0;
+
+    if (leftDesiredCenter !== rightDesiredCenter) {
+      return leftDesiredCenter - rightDesiredCenter;
+    }
+
+    return left.id.localeCompare(right.id);
+  });
+
+  let nextLeft = Number.NEGATIVE_INFINITY;
+
+  for (const unit of sortedUnits) {
+    const desiredCenter = desiredCenterByUnitId.get(unit.id) ?? unit.centerX;
+    const desiredLeft = desiredCenter - unit.width / 2;
+    const left = Math.max(desiredLeft, nextLeft);
+
+    unit.centerX = left + unit.width / 2;
+    nextLeft = left + unit.width + UNIT_GAP;
+  }
+
+  const rowLeft = Math.min(...sortedUnits.map((unit) => unit.centerX - unit.width / 2));
+  const rowRight = Math.max(...sortedUnits.map((unit) => unit.centerX + unit.width / 2));
+  const offset = (rowLeft + rowRight) / 2;
+
+  for (const unit of sortedUnits) {
+    unit.centerX -= offset;
+  }
+}
+
+function average(values: number[]): number {
+  return values.reduce((total, value) => total + value, 0) / values.length;
 }
 
 function getGenerationByPersonId(familyData: FamilyData, family: ReturnType<typeof buildFamilyIndex>): Map<string, number> {
@@ -180,23 +324,6 @@ function getGenerationByPersonId(familyData: FamilyData, family: ReturnType<type
   }
 
   return generationByPersonId;
-}
-
-function getDerivedFocusEdges(focusView: FocusView, focusPersonId: string): Edge[] {
-  const relationships = [
-    ...focusView.immediateFamily,
-    ...focusView.cousinFamilies.flatMap((group) => group.people),
-  ].filter((item) => item.personId !== focusPersonId);
-
-  return relationships.map((item) => ({
-    id: `derived-${focusPersonId}-${item.personId}-${item.relationship}`,
-    source: focusPersonId,
-    target: item.personId,
-    type: "smoothstep",
-    label: formatRelationship(item.relationship),
-    className: `edge-derived edge-derived-${item.relationship}`,
-    animated: item.relationship === "cousin",
-  }));
 }
 
 function getRelationshipLabel(focusView: FocusView, personId: string): string {
