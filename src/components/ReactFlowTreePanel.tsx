@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import styled from "styled-components";
 import ReactFlow, {
   Background,
   Controls,
@@ -39,11 +40,11 @@ export function ReactFlowTreePanel({
   );
 
   return (
-    <section className="tree-panel" aria-labelledby="react-flow-tree-title">
-      <div className="section-heading flow-heading">
+    <Panel aria-labelledby="react-flow-tree-title">
+      <Header>
         <div>
-          <p className="eyebrow">Interactive</p>
-          <h2 id="react-flow-tree-title">Family Tree</h2>
+          <Eyebrow>Interactive</Eyebrow>
+          <Title id="react-flow-tree-title">Family Tree</Title>
         </div>
 
         <div className="flow-legend" aria-label="Relationship line legend">
@@ -51,7 +52,7 @@ export function ReactFlowTreePanel({
           <span className="legend-item legend-partner">Partner</span>
           <span className="legend-item legend-derived">Focus link</span>
         </div>
-      </div>
+      </Header>
 
       <div className="react-flow-shell">
         <ReactFlow
@@ -82,7 +83,7 @@ export function ReactFlowTreePanel({
           />
         </ReactFlow>
       </div>
-    </section>
+    </Panel>
   );
 }
 
@@ -214,3 +215,27 @@ function getRelationshipLabel(focusView: FocusView, personId: string): string {
 
   return cousinRelationship ? formatRelationship(cousinRelationship.relationship) : "Family Member";
 }
+
+const Panel = styled.section`
+  min-width: 0;
+`;
+
+const Header = styled.div`
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+`;
+
+const Title = styled.h2`
+  font-size: 1.45rem;
+  line-height: 1.15;
+`;
+
+const Eyebrow = styled.p`
+  margin-bottom: 6px;
+  color: #6a4b13;
+  font-size: 0.77rem;
+  font-weight: 800;
+  text-transform: uppercase;
+`;
