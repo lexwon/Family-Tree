@@ -16,7 +16,6 @@ import "./styles.css";
 import {
   buildFamilyIndex,
   buildFocusView,
-  getFamilyGroups,
   getPersonAge,
   type FamilyData,
   type FocusView,
@@ -27,13 +26,11 @@ import {
 
 const familyData = familyDataJson as FamilyData;
 const family = buildFamilyIndex(familyData);
-const groups = getFamilyGroups(familyData, family);
 const initialFocusPersonId = getInitialFocusPersonId(familyData);
 const treeNodeTypes = { person: FamilyTreeNode };
 
 function App() {
   const [focusPersonId, setFocusPersonId] = useState<string>(initialFocusPersonId);
-  const [viewMode, setViewMode] = useState<ViewMode>("default");
   const focusView = useMemo(
     () => buildFocusView(familyData, family, focusPersonId),
     [focusPersonId],
@@ -59,76 +56,18 @@ function App() {
               ))}
             </select>
           </label>
-
-          <fieldset className="view-toggle" aria-label="Tree view mode">
-            <legend>View</legend>
-            <label>
-              <input
-                type="radio"
-                name="view-mode"
-                value="default"
-                checked={viewMode === "default"}
-                onChange={() => setViewMode("default")}
-              />
-              <span>Default</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="view-mode"
-                value="flow"
-                checked={viewMode === "flow"}
-                onChange={() => setViewMode("flow")}
-              />
-              <span>Tree</span>
-            </label>
-          </fieldset>
         </div>
       </section>
 
       <section className="content-grid">
-        {viewMode === "default" ? (
-          <TreePanel groups={groups} highlightedPersonIds={highlightedPersonIds} focusPersonId={focusPersonId} />
-        ) : (
-          <ReactFlowTreePanel
-            focusView={focusView}
-            highlightedPersonIds={highlightedPersonIds}
-            focusPersonId={focusPersonId}
-          />
-        )}
+        <ReactFlowTreePanel
+          focusView={focusView}
+          highlightedPersonIds={highlightedPersonIds}
+          focusPersonId={focusPersonId}
+        />
         <ExplanationPanel focusView={focusView} />
       </section>
     </main>
-  );
-}
-
-type ViewMode = "default" | "flow";
-
-type TreePanelProps = {
-  groups: FamilyGroupView[];
-  highlightedPersonIds: Set<string>;
-  focusPersonId: string;
-};
-
-function TreePanel({ groups, highlightedPersonIds, focusPersonId }: TreePanelProps) {
-  return (
-    <section className="tree-panel" aria-labelledby="tree-title">
-      <div className="section-heading">
-        <p className="eyebrow">People</p>
-        <h2 id="tree-title">Family Tree</h2>
-      </div>
-
-      <div className="family-groups">
-        {groups.map((group) => (
-          <FamilyGroup
-            key={group.id}
-            group={group}
-            highlightedPersonIds={highlightedPersonIds}
-            focusPersonId={focusPersonId}
-          />
-        ))}
-      </div>
-    </section>
   );
 }
 
@@ -344,67 +283,6 @@ function getRelationshipLabel(focusView: FocusView, personId: string): string {
     .find((item) => item.personId === personId);
 
   return cousinRelationship ? formatRelationship(cousinRelationship.relationship) : "Family Member";
-}
-
-type FamilyGroupView = ReturnType<typeof getFamilyGroups>[number];
-
-type FamilyGroupProps = {
-  group: FamilyGroupView;
-  highlightedPersonIds: Set<string>;
-  focusPersonId: string;
-};
-
-function FamilyGroup({ group, highlightedPersonIds, focusPersonId }: FamilyGroupProps) {
-  return (
-    <article className="family-group">
-      <div className="partners-row">
-        {group.partners.map((person) => (
-          <PersonCard
-            key={person.id}
-            person={person}
-            isFocus={person.id === focusPersonId}
-            isHighlighted={highlightedPersonIds.has(person.id)}
-          />
-        ))}
-      </div>
-
-      {group.children.length > 0 && (
-        <>
-          <div className="connector" aria-hidden="true" />
-          <div className="children-row">
-            {group.children.map((person) => (
-              <PersonCard
-                key={person.id}
-                person={person}
-                isFocus={person.id === focusPersonId}
-                isHighlighted={highlightedPersonIds.has(person.id)}
-              />
-            ))}
-          </div>
-        </>
-      )}
-    </article>
-  );
-}
-
-type PersonCardProps = {
-  person: Person;
-  isFocus: boolean;
-  isHighlighted: boolean;
-};
-
-function PersonCard({ person, isFocus, isHighlighted }: PersonCardProps) {
-  const age = getPersonAge(person);
-  const className = ["person-card", isFocus ? "is-focus" : "", isHighlighted ? "is-highlighted" : ""]
-    .filter(Boolean)
-    .join(" ");
-
-  return (
-    <div className={className}>
-      <strong>{person.displayName}</strong>
-      <span>{age ? `Born ${person.birthYear} · ${age}` : "Family member"}</span>
-    </div>
-  );
 }
 
 type ExplanationPanelProps = {
