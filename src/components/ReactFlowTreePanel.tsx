@@ -1,9 +1,11 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import styled from "styled-components";
 import ReactFlow, {
   Background,
   Controls,
   MiniMap,
+  useEdgesState,
+  useNodesState,
   type Edge,
   type Node,
 } from "reactflow";
@@ -37,10 +39,17 @@ export function ReactFlowTreePanel({
   familyData,
   family,
 }: ReactFlowTreePanelProps) {
-  const { nodes, edges } = useMemo(
+  const tree = useMemo(
     () => buildReactFlowTree(focusView, highlightedPersonIds, focusPersonId, familyData, family),
     [focusView, highlightedPersonIds, focusPersonId, familyData, family],
   );
+  const [nodes, setNodes, onNodesChange] = useNodesState(tree.nodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(tree.edges);
+
+  useEffect(() => {
+    setNodes(tree.nodes);
+    setEdges(tree.edges);
+  }, [tree, setNodes, setEdges]);
 
   return (
     <Panel aria-labelledby="react-flow-tree-title">
@@ -61,10 +70,12 @@ export function ReactFlowTreePanel({
           nodes={nodes}
           edges={edges}
           nodeTypes={treeNodeTypes}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
           fitView
           minZoom={0.35}
           maxZoom={1.6}
-          nodesDraggable
+          nodesDraggable={true}
           nodesConnectable={false}
           elementsSelectable
           proOptions={{ hideAttribution: true }}
@@ -96,7 +107,7 @@ function buildReactFlowTree(
   familyData: FamilyData,
   family: ReturnType<typeof buildFamilyIndex>,
 ): { nodes: Node<FamilyTreeNodeData>[]; edges: Edge[] } {
-  const generationByPersonId = getGenerationByPersonId(familyData, family);
+  const generationByPersonId = getGenerationByPersonId(familyData);
   const layoutUnits = buildLayoutUnits(familyData, generationByPersonId);
   const positionedUnits = positionLayoutUnits(layoutUnits);
 
@@ -299,31 +310,68 @@ function average(values: number[]): number {
   return values.reduce((total, value) => total + value, 0) / values.length;
 }
 
-function getGenerationByPersonId(familyData: FamilyData, family: ReturnType<typeof buildFamilyIndex>): Map<string, number> {
+function getGenerationByPersonId(familyData: FamilyData): Map<string, number> {
   const generationByPersonId = new Map<string, number>();
   const allChildIds = new Set(familyData.relationshipFacts.parentChild.map(({ childId }) => childId));
   const rootIds = familyData.people.map((person) => person.id).filter((personId) => !allChildIds.has(personId));
-  const queue = rootIds.map((personId) => ({ personId, generation: 0 }));
 
-  while (queue.length > 0) {
-    const current = queue.shift();
-    if (!current) {
-      continue;
+  for (const personId of rootIds) {
+    generationByPersonId.set(personId, 0);
+  }
+
+  let changed = true;
+  let passCount = 0;
+  const maxPassCount = familyData.people.length * 2;
+
+  while (changed && passCount < maxPassCount) {
+    changed = false;
+    passCount += 1;
+
+    for (const { person1Id, person2Id } of familyData.relationshipFacts.partnerships) {
+      const person1Generation = generationByPersonId.get(person1Id);
+      const person2Generation = generationByPersonId.get(person2Id);
+      const partnershipGeneration = Math.max(person1Generation ?? 0, person2Generation ?? 0);
+
+      if (setGenerationIfHigher(generationByPersonId, person1Id, partnershipGeneration)) {
+        changed = true;
+      }
+
+      if (setGenerationIfHigher(generationByPersonId, person2Id, partnershipGeneration)) {
+        changed = true;
+      }
     }
 
-    const knownGeneration = generationByPersonId.get(current.personId);
-    if (knownGeneration !== undefined && knownGeneration <= current.generation) {
-      continue;
+    for (const { parentId, childId } of familyData.relationshipFacts.parentChild) {
+      const parentGeneration = generationByPersonId.get(parentId) ?? 0;
+
+      if (setGenerationIfHigher(generationByPersonId, childId, parentGeneration + 1)) {
+        changed = true;
+      }
     }
+  }
 
-    generationByPersonId.set(current.personId, current.generation);
-
-    for (const childId of family.childrenOf(current.personId)) {
-      queue.push({ personId: childId, generation: current.generation + 1 });
+  for (const person of familyData.people) {
+    if (!generationByPersonId.has(person.id)) {
+      generationByPersonId.set(person.id, 0);
     }
   }
 
   return generationByPersonId;
+}
+
+function setGenerationIfHigher(
+  generationByPersonId: Map<string, number>,
+  personId: string,
+  generation: number,
+): boolean {
+  const currentGeneration = generationByPersonId.get(personId);
+
+  if (currentGeneration !== undefined && currentGeneration >= generation) {
+    return false;
+  }
+
+  generationByPersonId.set(personId, generation);
+  return true;
 }
 
 function getRelationshipLabel(focusView: FocusView, personId: string): string {
