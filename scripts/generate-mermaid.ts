@@ -1,11 +1,12 @@
 import { writeFile } from "node:fs/promises";
-import { loadFamilyData, paths } from "./family-data.mjs";
+import { loadFamilyData, paths } from "./family-data";
+import { type Person } from "../src/relationshipEngine";
 
 const familyData = await loadFamilyData();
 
 const lines = [
   "%% This file is generated from data/family.json.",
-  "%% Regenerate it with: node scripts/generate-mermaid.mjs",
+  "%% Regenerate it with: pnpm generate:mermaid",
   "flowchart TD",
   "",
   "    subgraph people[\"People\"]",
@@ -24,7 +25,7 @@ const lines = [
 const mermaid = `${lines.join("\n")}\n`;
 await writeFile(paths.mermaid, mermaid, "utf8");
 
-function formatPersonLabel(person) {
+function formatPersonLabel(person: Person): string {
   const labelParts = [person.displayName];
 
   if (person.birthYear) {
@@ -34,6 +35,6 @@ function formatPersonLabel(person) {
   return labelParts.map(escapeMermaidLabel).join("<br/>");
 }
 
-function escapeMermaidLabel(value) {
+function escapeMermaidLabel(value: string | number): string {
   return String(value).replaceAll("\\", "\\\\").replaceAll('"', '\\"');
 }

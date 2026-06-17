@@ -1,6 +1,11 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  buildFamilyIndex as buildEngineIndex,
+  type FamilyData,
+  type FamilyIndex,
+} from "../src/relationshipEngine";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
@@ -12,18 +17,18 @@ export const paths = {
   relationshipExplanations: path.join(repoRoot, "data", "relationship-explanations.json"),
 };
 
-export async function loadFamilyData(filePath = paths.familyData) {
+export async function loadFamilyData(filePath = paths.familyData): Promise<FamilyData> {
   const familyData = JSON.parse(await readFile(filePath, "utf8"));
   validateFamilyData(familyData);
-  return familyData;
+  return familyData as FamilyData;
 }
 
-export function validateFamilyData(data) {
+export function validateFamilyData(data: any): void {
   if (data.schemaVersion !== 1) {
     throw new Error(`Unsupported schemaVersion: ${data.schemaVersion}`);
   }
 
-  const requiredArrays = [
+  const requiredArrays: [string, any][] = [
     ["people", data.people],
     ["focusPersonIds", data.focusPersonIds],
     ["relationshipFacts.parentChild", data.relationshipFacts?.parentChild],
@@ -36,7 +41,7 @@ export function validateFamilyData(data) {
     }
   }
 
-  const personIds = new Set();
+  const personIds = new Set<string>();
   for (const person of data.people) {
     if (!person.id || !person.displayName) {
       throw new Error("Each person must have id and displayName");
@@ -64,59 +69,14 @@ export function validateFamilyData(data) {
   }
 }
 
-export function buildFamilyIndex(familyData) {
-  const peopleById = new Map(familyData.people.map((person) => [person.id, person]));
-  const parentIdsByChildId = new Map();
-  const childIdsByParentId = new Map();
-  const partnerIdsByPersonId = new Map();
-
-  for (const { parentId, childId } of familyData.relationshipFacts.parentChild) {
-    addToSetMap(parentIdsByChildId, childId, parentId);
-    addToSetMap(childIdsByParentId, parentId, childId);
-  }
-
-  for (const { person1Id, person2Id } of familyData.relationshipFacts.partnerships) {
-    addToSetMap(partnerIdsByPersonId, person1Id, person2Id);
-    addToSetMap(partnerIdsByPersonId, person2Id, person1Id);
-  }
-
-  return {
-    peopleById,
-    parentIdsByChildId,
-    childIdsByParentId,
-    partnerIdsByPersonId,
-    person: (personId) => peopleById.get(personId),
-    parentsOf: (personId) => sortedIds(parentIdsByChildId.get(personId), peopleById),
-    childrenOf: (personId) => sortedIds(childIdsByParentId.get(personId), peopleById),
-    partnersOf: (personId) => sortedIds(partnerIdsByPersonId.get(personId), peopleById),
-    areSiblings: (person1Id, person2Id) => {
-      if (person1Id === person2Id) {
-        return false;
-      }
-
-      const person1Parents = parentIdsByChildId.get(person1Id) ?? new Set();
-      const person2Parents = parentIdsByChildId.get(person2Id) ?? new Set();
-      return [...person1Parents].some((parentId) => person2Parents.has(parentId));
-    },
-  };
-}
-
-function assertPersonExists(personIds, personId, fieldName) {
+function assertPersonExists(personIds: Set<string>, personId: string, fieldName: string): void {
   if (!personIds.has(personId)) {
     throw new Error(`${fieldName} references unknown person id: ${personId}`);
   }
 }
 
-function addToSetMap(map, key, value) {
-  if (!map.has(key)) {
-    map.set(key, new Set());
-  }
-
-  map.get(key).add(value);
-}
-
-function sortedIds(ids, peopleById) {
-  return [...(ids ?? [])].sort((leftId, rightId) =>
-    peopleById.get(leftId).displayName.localeCompare(peopleById.get(rightId).displayName),
-  );
+// Re-export buildFamilyIndex from relationshipEngine to keep scripts compatible
+// while completely eliminating duplicate logic.
+export function buildFamilyIndex(familyData: FamilyData): FamilyIndex {
+  return buildEngineIndex(familyData);
 }

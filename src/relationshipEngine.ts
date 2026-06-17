@@ -48,12 +48,6 @@ export type FocusView = {
   cousinFamilies: CousinFamily[];
 };
 
-export type FamilyGroup = {
-  id: string;
-  partners: Person[];
-  children: Person[];
-};
-
 export type FamilyIndex = {
   peopleById: Map<string, Person>;
   parentIdsByChildId: Map<string, Set<string>>;
@@ -143,36 +137,6 @@ export function buildFocusView(familyData: FamilyData, family: FamilyIndex, focu
     ],
     cousinFamilies: findCousinFamilies(family, focusPersonId),
   };
-}
-
-export function getFamilyGroups(familyData: FamilyData, family: FamilyIndex): FamilyGroup[] {
-  const groupedPartnerIds = new Set<string>();
-  const groups = familyData.relationshipFacts.partnerships.map(({ person1Id, person2Id }) => {
-    groupedPartnerIds.add(person1Id);
-    groupedPartnerIds.add(person2Id);
-
-    const childIds = uniqueSortedIds([...family.childrenOf(person1Id), ...family.childrenOf(person2Id)], family);
-    return {
-      id: [person1Id, person2Id].sort().join("-"),
-      partners: [family.person(person1Id), family.person(person2Id)].sort(comparePeople),
-      children: childIds.map((personId) => family.person(personId)),
-    };
-  });
-
-  const ungroupedPeople = familyData.people.filter((person) => !groupedPartnerIds.has(person.id));
-  if (ungroupedPeople.length > 0) {
-    groups.push({
-      id: "ungrouped",
-      partners: ungroupedPeople.sort(comparePeople),
-      children: [],
-    });
-  }
-
-  return groups.sort((left, right) => {
-    const leftName = left.partners.map((person) => person.displayName).join(" ");
-    const rightName = right.partners.map((person) => person.displayName).join(" ");
-    return leftName.localeCompare(rightName);
-  });
 }
 
 export function getPersonAge(person: Person, now = new Date()): string | null {
@@ -310,8 +274,4 @@ function sortedIds(ids: Set<string> | undefined, peopleById: Map<string, Person>
 
     return leftPerson.displayName.localeCompare(rightPerson.displayName);
   });
-}
-
-function comparePeople(left: Person, right: Person): number {
-  return left.displayName.localeCompare(right.displayName);
 }

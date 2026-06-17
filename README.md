@@ -69,9 +69,9 @@ The React application derives its displayed relationships directly from [data/fa
 │   ├── relationship-explanations.json
 │   └── tree.mmd
 ├── scripts/
-│   ├── family-data.mjs
-│   ├── generate-mermaid.mjs
-│   └── generate-relationship-explanations.mjs
+│   ├── family-data.ts
+│   ├── generate-mermaid.ts
+│   └── generate-relationship-explanations.ts
 ├── src/
 │   ├── main.tsx
 │   ├── relationshipEngine.ts
@@ -119,20 +119,20 @@ pnpm build
 Regenerate the Mermaid view after changing the Family Data:
 
 ```sh
-node scripts/generate-mermaid.mjs
+pnpm generate:mermaid
 ```
 
 Regenerate Relationship Explanations after changing the Family Data:
 
 ```sh
-node scripts/generate-relationship-explanations.mjs
+pnpm generate:explanations
 ```
 
 Generate explanations for one supported Focus Person:
 
 ```sh
-node scripts/generate-relationship-explanations.mjs arya
-node scripts/generate-relationship-explanations.mjs kira
+pnpm generate:explanations arya
+pnpm generate:explanations kira
 ```
 
 ## GitHub Pages

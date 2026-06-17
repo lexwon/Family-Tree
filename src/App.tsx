@@ -59,7 +59,6 @@ export function App() {
         <ReactFlowTreePanel
           focusView={focusView}
           highlightedPersonIds={highlightedPersonIds}
-          focusPersonId={focusPersonId}
           familyData={familyData}
           family={family}
         />
@@ -70,7 +69,8 @@ export function App() {
 }
 
 const AppShell = styled.main`
-  minWidth: 1480px;
+  min-width: 1480px;
+  width: 100%;
   margin: 0 auto;
   padding: 28px;
 

@@ -58,6 +58,64 @@
           ]
         }
       ]
+    },
+    {
+      "focusPersonId": "kira",
+      "focusPersonName": "Kira Wong",
+      "immediateFamily": [
+        {
+          "personId": "alexander",
+          "personName": "Alexander Wong",
+          "relationship": "parent",
+          "explanation": "Alexander Wong is one of Kira Wong's parents."
+        },
+        {
+          "personId": "winny",
+          "personName": "Winny Wong",
+          "relationship": "parent",
+          "explanation": "Winny Wong is one of Kira Wong's parents."
+        },
+        {
+          "personId": "arya",
+          "personName": "Arya Wong",
+          "relationship": "sibling",
+          "explanation": "Arya Wong is Kira Wong's sibling because they share a parent."
+        }
+      ],
+      "cousinFamilies": [
+        {
+          "throughFocusParentId": "winny",
+          "throughFocusParentName": "Winny Wong",
+          "cousinParentId": "jenny",
+          "cousinParentName": "Jenny Wong",
+          "people": [
+            {
+              "personId": "jenny",
+              "personName": "Jenny Wong",
+              "relationship": "cousinParent",
+              "explanation": "Jenny Wong is Kira Wong's parent's sibling: Jenny Wong and Winny Wong are siblings."
+            },
+            {
+              "personId": "alex",
+              "personName": "Alex Lo",
+              "relationship": "cousinParentPartner",
+              "explanation": "Alex Lo is Jenny Wong's partner and Jacob Lo and Jordan Lo's parent."
+            },
+            {
+              "personId": "jacob",
+              "personName": "Jacob Lo",
+              "relationship": "cousin",
+              "explanation": "Jacob Lo is Kira Wong's cousin because Jacob Lo's parent Jenny Wong is the sibling of Kira Wong's parent Winny Wong."
+            },
+            {
+              "personId": "jordan",
+              "personName": "Jordan Lo",
+              "relationship": "cousin",
+              "explanation": "Jordan Lo is Kira Wong's cousin because Jordan Lo's parent Jenny Wong is the sibling of Kira Wong's parent Winny Wong."
+            }
+          ]
+        }
+      ]
     }
   ]
 }
