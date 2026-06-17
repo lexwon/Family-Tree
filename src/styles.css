@@ -19,6 +19,8 @@ body {
 }
 
 button,
+fieldset,
+input,
 select {
   font: inherit;
 }
@@ -35,6 +37,12 @@ select {
   justify-content: space-between;
   gap: 24px;
   padding: 24px 0 28px;
+}
+
+.topbar-controls {
+  display: flex;
+  align-items: end;
+  gap: 14px;
 }
 
 .eyebrow {
@@ -90,6 +98,48 @@ h3 {
   padding: 0 40px 0 12px;
 }
 
+.view-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(82px, 1fr));
+  gap: 4px;
+  min-width: min(100%, 190px);
+  margin: 0;
+  border: 1px solid #bbc7c0;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 4px;
+}
+
+.view-toggle legend {
+  color: #41534b;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transform: translateY(-8px);
+}
+
+.view-toggle label {
+  position: relative;
+  display: grid;
+  min-height: 34px;
+  place-items: center;
+  border-radius: 6px;
+  color: #41534b;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.view-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.view-toggle label:has(input:checked) {
+  background: #1f6f55;
+  color: #ffffff;
+}
+
 .content-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(360px, 0.9fr);
@@ -104,6 +154,45 @@ h3 {
 
 .section-heading {
   margin-bottom: 16px;
+}
+
+.flow-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.flow-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #41534b;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.legend-item::before {
+  content: "";
+  width: 24px;
+  height: 0;
+  border-top: 3px solid #55756a;
+}
+
+.legend-partner::before {
+  border-color: #b67922;
+}
+
+.legend-derived::before {
+  border-color: #6e6bb4;
+  border-top-style: dashed;
 }
 
 .family-groups {
@@ -176,6 +265,136 @@ h3 {
   box-shadow: inset 0 0 0 2px #1f6f55;
 }
 
+.react-flow-shell {
+  width: 100%;
+  height: min(72vh, 720px);
+  min-height: 520px;
+  overflow: hidden;
+  border: 1px solid #d9d2c4;
+  border-radius: 8px;
+  background: #fbfcf8;
+}
+
+.react-flow-shell .react-flow__attribution {
+  display: none;
+}
+
+.flow-person-node {
+  display: grid;
+  align-content: start;
+  width: 190px;
+  min-height: 102px;
+  border: 1px solid #d4ddd8;
+  border-radius: 8px;
+  background: #f6faf7;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgb(24 32 29 / 10%);
+}
+
+.flow-person-node strong {
+  color: #18201d;
+  font-size: 0.96rem;
+  line-height: 1.2;
+}
+
+.flow-person-node span {
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 9px;
+  border-radius: 999px;
+  background: #e9efe9;
+  color: #41534b;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.flow-person-node small {
+  margin-top: 8px;
+  color: #607169;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.flow-person-node.is-highlighted {
+  border-color: #6b9e82;
+  background: #eef8f2;
+}
+
+.flow-person-node.is-highlighted span {
+  background: #d6ecde;
+  color: #1f6f55;
+}
+
+.flow-person-node.is-focus {
+  border-color: #1f6f55;
+  background: #dff2e8;
+  box-shadow:
+    inset 0 0 0 2px #1f6f55,
+    0 10px 24px rgb(31 111 85 / 22%);
+}
+
+.flow-person-node.is-focus span {
+  background: #1f6f55;
+  color: #ffffff;
+}
+
+.flow-handle {
+  width: 8px;
+  height: 8px;
+  border: 2px solid #ffffff;
+  background: #6b9e82;
+}
+
+.react-flow__edge.edge-parent-child .react-flow__edge-path {
+  stroke: #55756a;
+  stroke-width: 2.5;
+}
+
+.react-flow__edge.edge-partnership .react-flow__edge-path {
+  stroke: #b67922;
+  stroke-width: 3;
+}
+
+.react-flow__edge.edge-derived .react-flow__edge-path {
+  stroke: #6e6bb4;
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+}
+
+.react-flow__edge.edge-derived-cousin .react-flow__edge-path {
+  stroke: #8f5d9f;
+}
+
+.react-flow__edge-textbg {
+  fill: #fffefa;
+}
+
+.react-flow__edge-text {
+  fill: #2d3a35;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.react-flow__controls {
+  border: 1px solid #d9d2c4;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgb(24 32 29 / 10%);
+}
+
+.react-flow__controls-button {
+  border-bottom-color: #d9d2c4;
+}
+
+.react-flow__minimap {
+  border: 1px solid #d9d2c4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fffefa;
+}
+
 .relationship-section {
   border-top: 1px solid #d9d2c4;
   padding: 18px 0;
@@ -236,6 +455,8 @@ h3 {
   }
 
   .topbar,
+  .topbar-controls,
+  .flow-heading,
   .relationship-section-title {
     align-items: stretch;
     flex-direction: column;
@@ -243,6 +464,10 @@ h3 {
 
   .content-grid {
     grid-template-columns: 1fr;
+  }
+
+  .flow-legend {
+    justify-content: flex-start;
   }
 }
 
@@ -262,5 +487,14 @@ h3 {
 
   .person-card {
     min-height: 74px;
+  }
+
+  .react-flow-shell {
+    height: 620px;
+    min-height: 620px;
+  }
+
+  .flow-person-node {
+    width: 170px;
   }
 }
