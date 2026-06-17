@@ -27,8 +27,7 @@ h1, h2, h3, p {
 /* TODO: refacotr this to styled components later */
 .react-flow-shell {
   width: 100%;
-  height: min(72vh, 720px);
-  min-height: 520px;
+  height: 1280px;
   overflow: hidden;
   border: 1px solid #d9d2c4;
   border-radius: 8px;

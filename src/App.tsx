@@ -70,7 +70,7 @@ export function App() {
 }
 
 const AppShell = styled.main`
-  width: min(1480px, 100%);
+  minWidth: 1480px;
   margin: 0 auto;
   padding: 28px;
 
