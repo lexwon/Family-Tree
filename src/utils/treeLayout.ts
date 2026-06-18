@@ -4,7 +4,7 @@ import {
   type FamilyData,
   type FocusView,
   type buildFamilyIndex,
-} from "../relationshipEngine";
+} from "./relationshipEngine";
 import { type FamilyTreeNodeData } from "../components/FamilyTreeNode";
 import { formatRelationship } from "../components/RelationshipSection";
 
@@ -63,7 +63,6 @@ export function buildReactFlowTree(
     source: parentId,
     target: childId,
     type: "smoothstep",
-    label: "parent",
     className: "edge-parent-child",
   }));
 
@@ -74,7 +73,6 @@ export function buildReactFlowTree(
     sourceHandle: "partner-right",
     targetHandle: "partner-left",
     type: "straight",
-    label: "partners",
     className: "edge-partnership",
   }));
 

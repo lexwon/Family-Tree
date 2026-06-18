@@ -1,5 +1,5 @@
 import { Handle, Position, type NodeProps } from "reactflow";
-import { type Person } from "../relationshipEngine";
+import { type Person } from "../utils/relationshipEngine";
 
 export type FamilyTreeNodeData = {
   person: Person;

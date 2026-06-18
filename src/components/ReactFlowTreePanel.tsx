@@ -11,7 +11,7 @@ import {
   type FamilyData,
   type FocusView,
   buildFamilyIndex,
-} from "../relationshipEngine";
+} from "../utils/relationshipEngine";
 import { FamilyTreeNode, type FamilyTreeNodeData } from "./FamilyTreeNode";
 import { buildReactFlowTree } from "../utils/treeLayout";
 
@@ -50,12 +50,7 @@ export function ReactFlowTreePanel({
         <div>
           <Eyebrow>Interactive</Eyebrow>
           <Title id="react-flow-tree-title">Family Tree</Title>
-        </div>
-
-        <div className="flow-legend" aria-label="Relationship line legend">
-          <span className="legend-item legend-parent">Parent</span>
-          <span className="legend-item legend-partner">Partner</span>
-        </div>
+        </div>        
       </Header>
 
       <div className="react-flow-shell">

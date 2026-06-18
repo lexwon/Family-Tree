@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { type FocusView } from "../relationshipEngine";
+import { type FocusView } from "../utils/relationshipEngine";
 import { RelationshipSection } from "./RelationshipSection";
 
 type ExplanationPanelProps = {

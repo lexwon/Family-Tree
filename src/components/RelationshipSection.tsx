@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { type RelationshipExplanation, type RelationshipKind } from "../relationshipEngine";
+import { type RelationshipExplanation, type RelationshipKind } from "../utils/relationshipEngine";
 
 type RelationshipSectionProps = {
   title: string;

@@ -6,7 +6,7 @@ import {
   buildFamilyIndex,
   buildFocusView,
   type FamilyData,
-} from "./relationshipEngine";
+} from "./utils/relationshipEngine";
 import { ExplanationPanel, ReactFlowTreePanel } from "./components";
 
 const familyData = familyDataJson as FamilyData;
