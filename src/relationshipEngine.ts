@@ -24,7 +24,7 @@ export type FamilyData = {
   };
 };
 
-export type RelationshipKind = "parent" | "sibling" | "cousinParent" | "cousinParentPartner" | "cousin";
+export type RelationshipKind = "parent" | "sibling" | "child" | "partner" | "cousinParent" | "cousinParentPartner" | "cousin";
 
 export type RelationshipExplanation = {
   personId: string;
@@ -105,14 +105,14 @@ export function buildFamilyIndex(familyData: FamilyData): FamilyIndex {
 }
 
 export function buildFocusView(familyData: FamilyData, family: FamilyIndex, focusPersonId: string): FocusView {
-  if (!familyData.focusPersonIds.includes(focusPersonId)) {
-    throw new Error(
-      `${focusPersonId} is not a supported Focus Person. Use one of: ${familyData.focusPersonIds.join(", ")}`,
-    );
+  if (!family.peopleById.has(focusPersonId)) {
+    throw new Error(`Unknown person id: ${focusPersonId}`);
   }
 
   const parents = family.parentsOf(focusPersonId);
+  const partners = family.partnersOf(focusPersonId);
   const siblings = findSiblings(family, focusPersonId);
+  const children = family.childrenOf(focusPersonId);
 
   return {
     focusPersonId,
@@ -126,12 +126,28 @@ export function buildFocusView(familyData: FamilyData, family: FamilyIndex, focu
           `${name(family, parentId)} is one of ${name(family, focusPersonId)}'s parents.`,
         ),
       ),
+      ...partners.map((partnerId) =>
+        explanation(
+          family,
+          partnerId,
+          "partner",
+          `${name(family, partnerId)} is ${name(family, focusPersonId)}'s partner.`,
+        ),
+      ),
       ...siblings.map((siblingId) =>
         explanation(
           family,
           siblingId,
           "sibling",
           `${name(family, siblingId)} is ${name(family, focusPersonId)}'s sibling because they share a parent.`,
+        ),
+      ),
+      ...children.map((childId) =>
+        explanation(
+          family,
+          childId,
+          "child",
+          `${name(family, childId)} is ${name(family, focusPersonId)}'s child.`,
         ),
       ),
     ],

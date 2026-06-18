@@ -31,6 +31,8 @@ export function formatRelationship(relationship: RelationshipKind): string {
   const labels: Record<RelationshipKind, string> = {
     parent: "Parent",
     sibling: "Sibling",
+    child: "Child",
+    partner: "Partner",
     cousinParent: "Parent's Sibling",
     cousinParentPartner: "Partner",
     cousin: "Cousin",

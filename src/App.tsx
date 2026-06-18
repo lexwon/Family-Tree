@@ -29,7 +29,6 @@ export function App() {
     return new Set([
       focusView.focusPersonId,
       ...focusView.immediateFamily.map((item) => item.personId),
-      ...focusView.cousinFamilies.flatMap((group) => group.people.map((item) => item.personId)),
     ]);
   }, [focusView]);
 
@@ -40,19 +39,6 @@ export function App() {
           <Eyebrow>Family Tree</Eyebrow>
           <Title id="app-title">{focusView.focusPersonName}'s Family View</Title>
         </div>
-
-        <div className="controls">
-          <FocusPicker>
-            <span>Focus Person</span>
-            <select value={focusPersonId} onChange={(event) => setFocusPersonId(event.target.value)}>
-              {familyData.focusPersonIds.map((personId) => (
-                <option key={personId} value={personId}>
-                  {family.person(personId).displayName}
-                </option>
-              ))}
-            </select>
-          </FocusPicker>
-        </div>
       </TopBar>
 
       <ContentGrid>
@@ -61,6 +47,7 @@ export function App() {
           highlightedPersonIds={highlightedPersonIds}
           familyData={familyData}
           family={family}
+          onSelectPerson={setFocusPersonId}
         />
         <ExplanationPanel focusView={focusView} />
       </ContentGrid>
@@ -109,25 +96,7 @@ const Eyebrow = styled.p`
   text-transform: uppercase;
 `;
 
-const FocusPicker = styled.label`
-  display: grid;
-  gap: 8px;
-  min-width: min(100%, 240px);
-  color: #41534b;
-  font-size: 0.9rem;
-  font-weight: 700;
 
-  select {
-    font: inherit;
-    width: 100%;
-    min-height: 44px;
-    border: 1px solid #bbc7c0;
-    border-radius: 8px;
-    background: #ffffff;
-    color: #18201d;
-    padding: 0 40px 0 12px;
-  }
-`;
 
 const ContentGrid = styled.section`
   display: grid;

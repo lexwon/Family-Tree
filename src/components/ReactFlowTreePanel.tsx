@@ -22,6 +22,7 @@ type ReactFlowTreePanelProps = {
   highlightedPersonIds: Set<string>;
   familyData: FamilyData;
   family: ReturnType<typeof buildFamilyIndex>;
+  onSelectPerson: (personId: string) => void;
 };
 
 export function ReactFlowTreePanel({
@@ -29,6 +30,7 @@ export function ReactFlowTreePanel({
   highlightedPersonIds,
   familyData,
   family,
+  onSelectPerson,
 }: ReactFlowTreePanelProps) {
   const tree = useMemo(
     () => buildReactFlowTree(focusView, highlightedPersonIds, focusView.focusPersonId, familyData, family),
@@ -63,6 +65,7 @@ export function ReactFlowTreePanel({
           nodeTypes={treeNodeTypes}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          onNodeClick={(_event, node) => onSelectPerson(node.id)}
           fitView
           minZoom={0.35}
           maxZoom={1.6}

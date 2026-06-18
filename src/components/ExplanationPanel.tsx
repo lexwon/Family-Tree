@@ -15,15 +15,6 @@ export function ExplanationPanel({ focusView }: ExplanationPanelProps) {
       </SectionHeading>
 
       <RelationshipSection title="Immediate Family" items={focusView.immediateFamily} />
-
-      {focusView.cousinFamilies.map((familyGroup) => (
-        <RelationshipSection
-          key={familyGroup.cousinParentId}
-          title={`${familyGroup.cousinParentName}'s Family`}
-          subtitle={`Connected through ${familyGroup.throughFocusParentName}`}
-          items={familyGroup.people}
-        />
-      ))}
     </Panel>
   );
 }
