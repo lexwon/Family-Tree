@@ -1,6 +1,6 @@
 import { writeFile } from "node:fs/promises";
-import { loadFamilyData, paths, buildFamilyIndex } from "./family-data";
-import { buildFocusView } from "../src/relationshipEngine";
+import { loadFamilyData, paths, buildFamilyIndex } from "./family-data.ts";
+import { buildFocusView } from "../src/utils/relationshipEngine.ts";
 
 const familyData = await loadFamilyData();
 const family = buildFamilyIndex(familyData);

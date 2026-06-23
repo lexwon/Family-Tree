@@ -10,18 +10,36 @@ flowchart TD
         winny["Winny Wong<br/>Born 1981"]
         arya["Arya Wong<br/>Born 2017"]
         kira["Kira Wong<br/>Born 2020"]
-        jimmy["Jimmy Wong"]
+        jimmy["Shing (Jimmy) Wong"]
         lan["Lan Wong"]
         alex["Alex Lo<br/>Born 1987"]
         jenny["Jenny Wong<br/>Born 1987"]
         jordan["Jordan Lo<br/>Born 2020"]
         jacob["Jacob Lo<br/>Born 2022"]
+        wong-grandfather["Wong Grandfather"]
+        wong-grandmother["Wong Grandmother"]
+        sang["Sang Duong"]
+        david-duong["David Duong"]
+        christina-duong["Christina Duong<br/>Born 1991"]
+        nathan-lee["Nathan Lee"]
+        jerermy-lee["Jerermy Lee<br/>Born 2020"]
+        serena-lee["Serena Lee<br/>Born 2021"]
+        kam-ying-fong["Kam Ying Fong<br/>Born 1914"]
+        thomas-ng["Thomas Ng"]
+        hady-shu["Hady Shu"]
+        vicki-ng["Vicki Ng"]
+        wendy-ng["Wendy Ng<br/>Born 1980"]
+        jennifer-ng["Jennifer Ng<br/>Born 1983"]
     end
 
     allen ---|"partnership"| emmi
     alexander ---|"partnership"| winny
     jimmy ---|"partnership"| lan
     alex ---|"partnership"| jenny
+    wong-grandfather ---|"partnership"| wong-grandmother
+    sang ---|"partnership"| david-duong
+    christina-duong ---|"partnership"| nathan-lee
+    thomas-ng ---|"partnership"| hady-shu
     allen -->|"parent-child"| alexander
     allen -->|"parent-child"| emma
     emmi -->|"parent-child"| alexander
@@ -38,4 +56,22 @@ flowchart TD
     alex -->|"parent-child"| jacob
     jenny -->|"parent-child"| jordan
     jenny -->|"parent-child"| jacob
+    wong-grandfather -->|"parent-child"| jimmy
+    wong-grandfather -->|"parent-child"| sang
+    wong-grandmother -->|"parent-child"| jimmy
+    wong-grandmother -->|"parent-child"| sang
+    sang -->|"parent-child"| christina-duong
+    david-duong -->|"parent-child"| christina-duong
+    christina-duong -->|"parent-child"| jerermy-lee
+    christina-duong -->|"parent-child"| serena-lee
+    nathan-lee -->|"parent-child"| jerermy-lee
+    nathan-lee -->|"parent-child"| serena-lee
+    kam-ying-fong -->|"parent-child"| emmi
+    kam-ying-fong -->|"parent-child"| thomas-ng
+    thomas-ng -->|"parent-child"| vicki-ng
+    thomas-ng -->|"parent-child"| wendy-ng
+    thomas-ng -->|"parent-child"| jennifer-ng
+    hady-shu -->|"parent-child"| vicki-ng
+    hady-shu -->|"parent-child"| wendy-ng
+    hady-shu -->|"parent-child"| jennifer-ng
 

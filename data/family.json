@@ -37,7 +37,7 @@
     },
     {
       "id": "jimmy",
-      "displayName": "Jimmy Wong"
+      "displayName": "Shing (Jimmy) Wong"
     },
     {
       "id": "lan",
@@ -62,6 +62,69 @@
       "id": "jacob",
       "displayName": "Jacob Lo",
       "birthYear": 2022
+    },
+    {
+      "id": "wong-grandfather",
+      "displayName": "Wong Grandfather"
+    },
+    {
+      "id": "wong-grandmother",
+      "displayName": "Wong Grandmother"
+    },
+    {
+      "id": "sang",
+      "displayName": "Sang Duong"
+    },
+    {
+      "id": "david-duong",
+      "displayName": "David Duong"
+    },
+    {
+      "id": "christina-duong",
+      "displayName": "Christina Duong",
+      "birthYear": 1991
+    },
+    {
+      "id": "nathan-lee",
+      "displayName": "Nathan Lee"
+    },
+    {
+      "id": "jerermy-lee",
+      "displayName": "Jerermy Lee",
+      "birthYear": 2020
+    },
+    {
+      "id": "serena-lee",
+      "displayName": "Serena Lee",
+      "birthYear": 2021
+    },
+    {
+      "id": "kam-ying-fong",
+      "displayName": "Kam Ying Fong",
+      "birthYear": 1914,
+      "deathYear": 2018
+    },
+    {
+      "id": "thomas-ng",
+      "displayName": "Thomas Ng"
+    },
+    {
+      "id": "hady-shu",
+      "displayName": "Hady Shu"
+    },
+    {
+      "id": "vicki-ng",
+      "displayName": "Vicki Ng"
+    },
+    {
+      "id": "wendy-ng",
+      "displayName": "Wendy Ng",
+      "birthYear": 1980
+    },
+    {
+      "id": "jennifer-ng",
+      "displayName": "Jennifer Ng",
+      "birthYear": 1983
     }
   ],
   "relationshipFacts": {
@@ -129,6 +192,78 @@
       {
         "parentId": "jenny",
         "childId": "jacob"
+      },
+      {
+        "parentId": "wong-grandfather",
+        "childId": "jimmy"
+      },
+      {
+        "parentId": "wong-grandfather",
+        "childId": "sang"
+      },
+      {
+        "parentId": "wong-grandmother",
+        "childId": "jimmy"
+      },
+      {
+        "parentId": "wong-grandmother",
+        "childId": "sang"
+      },
+      {
+        "parentId": "sang",
+        "childId": "christina-duong"
+      },
+      {
+        "parentId": "david-duong",
+        "childId": "christina-duong"
+      },
+      {
+        "parentId": "christina-duong",
+        "childId": "jerermy-lee"
+      },
+      {
+        "parentId": "christina-duong",
+        "childId": "serena-lee"
+      },
+      {
+        "parentId": "nathan-lee",
+        "childId": "jerermy-lee"
+      },
+      {
+        "parentId": "nathan-lee",
+        "childId": "serena-lee"
+      },
+      {
+        "parentId": "kam-ying-fong",
+        "childId": "emmi"
+      },
+      {
+        "parentId": "kam-ying-fong",
+        "childId": "thomas-ng"
+      },
+      {
+        "parentId": "thomas-ng",
+        "childId": "vicki-ng"
+      },
+      {
+        "parentId": "thomas-ng",
+        "childId": "wendy-ng"
+      },
+      {
+        "parentId": "thomas-ng",
+        "childId": "jennifer-ng"
+      },
+      {
+        "parentId": "hady-shu",
+        "childId": "vicki-ng"
+      },
+      {
+        "parentId": "hady-shu",
+        "childId": "wendy-ng"
+      },
+      {
+        "parentId": "hady-shu",
+        "childId": "jennifer-ng"
       }
     ],
     "partnerships": [
@@ -147,6 +282,22 @@
       {
         "person1Id": "alex",
         "person2Id": "jenny"
+      },
+      {
+        "person1Id": "wong-grandfather",
+        "person2Id": "wong-grandmother"
+      },
+      {
+        "person1Id": "sang",
+        "person2Id": "david-duong"
+      },
+      {
+        "person1Id": "christina-duong",
+        "person2Id": "nathan-lee"
+      },
+      {
+        "person1Id": "thomas-ng",
+        "person2Id": "hady-shu"
       }
     ]
   }

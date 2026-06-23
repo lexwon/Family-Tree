@@ -5,7 +5,7 @@ import {
   buildFamilyIndex as buildEngineIndex,
   type FamilyData,
   type FamilyIndex,
-} from "../src/relationshipEngine";
+} from "../src/utils/relationshipEngine.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");

@@ -1,6 +1,6 @@
 import { writeFile } from "node:fs/promises";
-import { loadFamilyData, paths } from "./family-data";
-import { type Person } from "../src/relationshipEngine";
+import { loadFamilyData, paths } from "./family-data.ts";
+import { type Person } from "../src/utils/relationshipEngine.ts";
 
 const familyData = await loadFamilyData();
 
