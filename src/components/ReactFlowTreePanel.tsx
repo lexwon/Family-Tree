@@ -40,7 +40,21 @@ export function ReactFlowTreePanel({
   const [edges, setEdges, onEdgesChange] = useEdgesState(tree.edges);
 
   useEffect(() => {
-    setNodes(tree.nodes);
+    setNodes((prevNodes) => {
+      const existingPositions = new Map(
+        prevNodes.map((node) => [node.id, node.position]),
+      );
+      return tree.nodes.map((node) => {
+        const prevPosition = existingPositions.get(node.id);
+        if (prevPosition) {
+          return {
+            ...node,
+            position: prevPosition,
+          };
+        }
+        return node;
+      });
+    });
     setEdges(tree.edges);
   }, [tree, setNodes, setEdges]);
 

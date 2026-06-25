@@ -125,7 +125,55 @@
       "id": "jennifer-ng",
       "displayName": "Jennifer Ng",
       "birthYear": 1983
-    }
+    },
+    {
+      "id": "daniel-nagrampa",
+      "displayName": "Daniel Nagrampa"
+    },
+    {
+      "id": "bryan-wimalasekera",
+      "displayName": "Bryan Wimalasekera"
+    },
+    {
+      "id": "danino-nagrampa",
+      "displayName": "Danino Nagrampa"
+    },
+    {
+      "id": "kaimi-nagrampa",
+      "displayName": "Kaimi Nagrampa"
+    },
+    {
+      "id": "luna-nagrampa",
+      "displayName": "Luna Nagrampa"
+    },
+    {
+      "id": "stephen-lo",
+      "displayName": "Stephen Lo"
+    },
+    {
+      "id": "irene-lo",
+      "displayName": "Irene Lo"
+    },
+    {
+      "id": "keith-lo",
+      "displayName": "Keith Lo"
+    },
+    {
+      "id": "minnie",
+      "displayName": "Minnie"
+    },
+    {
+      "id": "lo-grandparents",
+      "displayName": "Lo Grandparents"
+    },
+    {
+      "id": "ava-lo",
+      "displayName": "Ava Lo"
+    },
+    {
+      "id": "evan-lo",
+      "displayName": "Evan Lo"
+    }    
   ],
   "relationshipFacts": {
     "parentChild": [
@@ -264,6 +312,66 @@
       {
         "parentId": "hady-shu",
         "childId": "jennifer-ng"
+      },
+      {
+        "parentId": "daniel-nagrampa",
+        "childId": "danino-nagrampa"
+      },
+      {
+        "parentId": "daniel-nagrampa",
+        "childId": "kaimi-nagrampa"
+      },
+      {
+        "parentId": "daniel-nagrampa",
+        "childId": "luna-nagrampa"
+      },
+      {
+        "parentId": "wendy-ng",
+        "childId": "danino-nagrampa"
+      },
+      {
+        "parentId": "wendy-ng",
+        "childId": "kaimi-nagrampa"
+      },
+      {
+        "parentId": "wendy-ng",
+        "childId": "luna-nagrampa"
+      },
+      { 
+        "parentId": "stephen-lo",
+        "childId": "alex"
+      },
+      { 
+        "parentId": "irene-lo",
+        "childId": "alex"
+      },
+      { 
+        "parentId": "stephen-lo",
+        "childId": "keith-lo"
+      },
+      { 
+        "parentId": "irene-lo",
+        "childId": "keith-lo"
+      },
+      {
+        "parentId": "lo-grandparents",
+        "childId": "stephen-lo"
+      },
+      {
+        "parentId": "keith-lo",
+        "childId": "ava-lo"
+      },
+      {
+        "parentId": "keith-lo",
+        "childId": "evan-lo"
+      },
+      {
+        "parentId": "minnie",
+        "childId": "ava-lo"
+      },
+      {
+        "parentId": "minnie",
+        "childId": "evan-lo"
       }
     ],
     "partnerships": [
@@ -298,6 +406,22 @@
       {
         "person1Id": "thomas-ng",
         "person2Id": "hady-shu"
+      },
+      {
+        "person1Id": "wendy-ng",
+        "person2Id": "daniel-nagrampa"
+      },
+      {
+        "person1Id": "bryan-wimalasekera",
+        "person2Id": "vicki-ng"
+      },
+      {
+        "person1Id": "stephen-lo",
+        "person2Id": "irene-lo"
+      },
+      {
+        "person1Id": "minnie",
+        "person2Id": "keith-lo"
       }
     ]
   }
