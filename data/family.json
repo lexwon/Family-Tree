@@ -40,7 +40,7 @@
       "displayName": "Shing (Jimmy) Wong"
     },
     {
-      "id": "lan",
+      "id": "lan-wong",
       "displayName": "Lan Wong"
     },
     {
@@ -173,7 +173,27 @@
     {
       "id": "evan-lo",
       "displayName": "Evan Lo"
-    }    
+    },
+    {
+      "id": "lan",
+      "displayName": "Lan"
+    },
+    {
+      "id": "lily",
+      "displayName": "lily"
+    },
+    {
+      "id": "andy-lee",
+      "displayName": "Andy Lee"
+    },
+    {
+      "id": "ella-lee",
+      "displayName": "Ella Lee"
+    },
+    {
+      "id": "owen-lee",
+      "displayName": "Owen Lee"
+    }
   ],
   "relationshipFacts": {
     "parentChild": [
@@ -218,11 +238,11 @@
         "childId": "jenny"
       },
       {
-        "parentId": "lan",
+        "parentId": "lan-wong",
         "childId": "winny"
       },
       {
-        "parentId": "lan",
+        "parentId": "lan-wong",
         "childId": "jenny"
       },
       {
@@ -256,6 +276,14 @@
       {
         "parentId": "wong-grandmother",
         "childId": "sang"
+      },
+      {
+        "parentId": "wong-grandfather",
+        "childId": "lan"
+      },
+      {
+        "parentId": "wong-grandmother",
+        "childId": "lan"
       },
       {
         "parentId": "sang",
@@ -372,6 +400,26 @@
       {
         "parentId": "minnie",
         "childId": "evan-lo"
+      },
+      {
+        "parentId": "lan",
+        "childId": "lily"
+      },
+      {
+        "parentId": "lily",
+        "childId": "ella-lee"
+      },
+      {
+        "parentId": "lily",
+        "childId": "owen-lee"
+      },
+      {
+        "parentId": "andy-lee",
+        "childId": "ella-lee"
+      },
+      {
+        "parentId": "andy-lee",
+        "childId": "owen-lee"
       }
     ],
     "partnerships": [
@@ -385,7 +433,7 @@
       },
       {
         "person1Id": "jimmy",
-        "person2Id": "lan"
+        "person2Id": "lan-wong"
       },
       {
         "person1Id": "alex",
@@ -422,6 +470,10 @@
       {
         "person1Id": "minnie",
         "person2Id": "keith-lo"
+      },
+      {
+        "person1Id": "lily",
+        "person2Id": "andy-lee"
       }
     ]
   }

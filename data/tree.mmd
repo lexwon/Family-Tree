@@ -11,7 +11,7 @@ flowchart TD
         arya["Arya Wong<br/>Born 2017"]
         kira["Kira Wong<br/>Born 2020"]
         jimmy["Shing (Jimmy) Wong"]
-        lan["Lan Wong"]
+        lan-wong["Lan Wong"]
         alex["Alex Lo<br/>Born 1987"]
         jenny["Jenny Wong<br/>Born 1987"]
         jordan["Jordan Lo<br/>Born 2020"]
@@ -42,11 +42,16 @@ flowchart TD
         lo-grandparents["Lo Grandparents"]
         ava-lo["Ava Lo"]
         evan-lo["Evan Lo"]
+        lan["Lan"]
+        lily["lily"]
+        andy-lee["Andy Lee"]
+        ella-lee["Ella Lee"]
+        owen-lee["Owen Lee"]
     end
 
     allen ---|"partnership"| emmi
     alexander ---|"partnership"| winny
-    jimmy ---|"partnership"| lan
+    jimmy ---|"partnership"| lan-wong
     alex ---|"partnership"| jenny
     wong-grandfather ---|"partnership"| wong-grandmother
     sang ---|"partnership"| david-duong
@@ -56,6 +61,7 @@ flowchart TD
     bryan-wimalasekera ---|"partnership"| vicki-ng
     stephen-lo ---|"partnership"| irene-lo
     minnie ---|"partnership"| keith-lo
+    lily ---|"partnership"| andy-lee
     allen -->|"parent-child"| alexander
     allen -->|"parent-child"| emma
     emmi -->|"parent-child"| alexander
@@ -66,8 +72,8 @@ flowchart TD
     winny -->|"parent-child"| kira
     jimmy -->|"parent-child"| winny
     jimmy -->|"parent-child"| jenny
-    lan -->|"parent-child"| winny
-    lan -->|"parent-child"| jenny
+    lan-wong -->|"parent-child"| winny
+    lan-wong -->|"parent-child"| jenny
     alex -->|"parent-child"| jordan
     alex -->|"parent-child"| jacob
     jenny -->|"parent-child"| jordan
@@ -76,6 +82,8 @@ flowchart TD
     wong-grandfather -->|"parent-child"| sang
     wong-grandmother -->|"parent-child"| jimmy
     wong-grandmother -->|"parent-child"| sang
+    wong-grandfather -->|"parent-child"| lan
+    wong-grandmother -->|"parent-child"| lan
     sang -->|"parent-child"| christina-duong
     david-duong -->|"parent-child"| christina-duong
     christina-duong -->|"parent-child"| jerermy-lee
@@ -105,4 +113,9 @@ flowchart TD
     keith-lo -->|"parent-child"| evan-lo
     minnie -->|"parent-child"| ava-lo
     minnie -->|"parent-child"| evan-lo
+    lan -->|"parent-child"| lily
+    lily -->|"parent-child"| ella-lee
+    lily -->|"parent-child"| owen-lee
+    andy-lee -->|"parent-child"| ella-lee
+    andy-lee -->|"parent-child"| owen-lee
 
