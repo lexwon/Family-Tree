@@ -89,10 +89,10 @@ export function ReactFlowTreePanel({
             nodeColor={(node) => {
               const data = node.data as FamilyTreeNodeData;
               if (data.isFocus) {
-                return "#1f6f55";
+                return "#003feb";
               }
 
-              return data.isHighlighted ? "#6b9e82" : "#b9c7c0";
+              return data.isHighlighted ? "#6b6b9e" : "#b9c7c0";
             }}
             pannable
             zoomable

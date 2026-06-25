@@ -77,7 +77,7 @@ h1, h2, h3, p {
 }
 
 .flow-person-node.is-highlighted {
-  border-color: #6b9e82;
+  border-color: #2041fd;
   background: #eef8f2;
 }
 
@@ -87,10 +87,10 @@ h1, h2, h3, p {
 }
 
 .flow-person-node.is-focus {
-  border-color: #1f6f55;
+  border-color: #003feb;
   background: #dff2e8;
   box-shadow:
-    inset 0 0 0 2px #1f6f55,
+    inset 0 0 0 2px #003feb,
     0 10px 24px rgb(31 111 85 / 22%);
 }
 
@@ -134,6 +134,12 @@ h1, h2, h3, p {
   fill: #2d3a35;
   font-size: 10px;
   font-weight: 800;
+}
+
+.react-flow__edge.edge-highlighted .react-flow__edge-path {
+  stroke: #003feb;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 5px rgb(0 63 235 / 32%));
 }
 
 .react-flow__controls {

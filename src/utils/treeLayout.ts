@@ -58,23 +58,41 @@ export function buildReactFlowTree(
     });
   });
 
-  const parentChildEdges: Edge[] = familyData.relationshipFacts.parentChild.map(({ parentId, childId }) => ({
-    id: `parent-${parentId}-${childId}`,
-    source: parentId,
-    target: childId,
-    type: "smoothstep",
-    className: "edge-parent-child",
-  }));
+  const getEdgeClassName = (
+    baseClassName: string,
+    sourceId: string,
+    targetId: string,
+  ) => {
+    const isHighlightedEdge =
+      highlightedPersonIds.has(sourceId) && highlightedPersonIds.has(targetId);
 
-  const partnershipEdges: Edge[] = familyData.relationshipFacts.partnerships.map(({ person1Id, person2Id }) => ({
-    id: `partner-${person1Id}-${person2Id}`,
-    source: person1Id,
-    target: person2Id,
-    sourceHandle: "partner-right",
-    targetHandle: "partner-left",
-    type: "straight",
-    className: "edge-partnership",
-  }));
+    return [baseClassName, isHighlightedEdge ? "edge-highlighted" : ""]
+      .filter(Boolean)
+      .join(" ");
+  };
+
+  const parentChildEdges: Edge[] = familyData.relationshipFacts.parentChild.map(
+    ({ parentId, childId }) => ({
+      id: `parent-${parentId}-${childId}`,
+      source: parentId,
+      target: childId,
+      type: "smoothstep",
+      className: getEdgeClassName("edge-parent-child", parentId, childId),
+    }),
+  );
+
+  const partnershipEdges: Edge[] =
+    familyData.relationshipFacts.partnerships.map(
+      ({ person1Id, person2Id }) => ({
+        id: `partner-${person1Id}-${person2Id}`,
+        source: person1Id,
+        target: person2Id,
+        sourceHandle: "partner-right",
+        targetHandle: "partner-left",
+        type: "straight",
+        className: getEdgeClassName("edge-partnership", person1Id, person2Id),
+      }),
+    );
 
   return {
     nodes,
@@ -89,7 +107,8 @@ function buildLayoutUnits(
   const unitsById = new Map<string, LayoutUnit>();
   const unitIdByPersonId = new Map<string, string>();
 
-  for (const { person1Id, person2Id } of familyData.relationshipFacts.partnerships) {
+  for (const { person1Id, person2Id } of familyData.relationshipFacts
+    .partnerships) {
     const personIds = [person1Id, person2Id];
     const unit = createLayoutUnit(personIds, generationByPersonId);
 
@@ -108,7 +127,8 @@ function buildLayoutUnits(
     unitIdByPersonId.set(person.id, unit.id);
   }
 
-  for (const { parentId, childId } of familyData.relationshipFacts.parentChild) {
+  for (const { parentId, childId } of familyData.relationshipFacts
+    .parentChild) {
     const parentUnitId = unitIdByPersonId.get(parentId);
     const childUnitId = unitIdByPersonId.get(childId);
 
@@ -132,14 +152,21 @@ function buildLayoutUnits(
   });
 }
 
-function createLayoutUnit(personIds: string[], generationByPersonId: Map<string, number>): LayoutUnit {
-  const generation = Math.max(...personIds.map((personId) => generationByPersonId.get(personId) ?? 0));
+function createLayoutUnit(
+  personIds: string[],
+  generationByPersonId: Map<string, number>,
+): LayoutUnit {
+  const generation = Math.max(
+    ...personIds.map((personId) => generationByPersonId.get(personId) ?? 0),
+  );
 
   return {
     id: personIds.join("+"),
     personIds,
     generation,
-    width: personIds.length * NODE_WIDTH + Math.max(0, personIds.length - 1) * PARTNER_GAP,
+    width:
+      personIds.length * NODE_WIDTH +
+      Math.max(0, personIds.length - 1) * PARTNER_GAP,
     centerX: 0,
     parentUnitIds: new Set(),
     childUnitIds: new Set(),
@@ -148,11 +175,16 @@ function createLayoutUnit(personIds: string[], generationByPersonId: Map<string,
 
 function positionLayoutUnits(layoutUnits: LayoutUnit[]): LayoutUnit[] {
   const unitsById = new Map(layoutUnits.map((unit) => [unit.id, unit]));
-  const generations = [...new Set(layoutUnits.map((unit) => unit.generation))].sort((left, right) => left - right);
+  const generations = [
+    ...new Set(layoutUnits.map((unit) => unit.generation)),
+  ].sort((left, right) => left - right);
 
   for (const generation of generations) {
     const units = layoutUnits.filter((unit) => unit.generation === generation);
-    placeUnits(units, units.map((_, index) => index * (NODE_WIDTH + PARTNER_GAP + UNIT_GAP)));
+    placeUnits(
+      units,
+      units.map((_, index) => index * (NODE_WIDTH + PARTNER_GAP + UNIT_GAP)),
+    );
   }
 
   for (const generation of generations.slice().reverse()) {
@@ -185,7 +217,12 @@ function positionLayoutUnits(layoutUnits: LayoutUnit[]): LayoutUnit[] {
 }
 
 function placeUnits(units: LayoutUnit[], desiredCenters: number[]): void {
-  const desiredCenterByUnitId = new Map(units.map((unit, index) => [unit.id, desiredCenters[index] ?? unit.centerX]));
+  const desiredCenterByUnitId = new Map(
+    units.map((unit, index) => [
+      unit.id,
+      desiredCenters[index] ?? unit.centerX,
+    ]),
+  );
   const sortedUnits = [...units].sort((left, right) => {
     const leftDesiredCenter = desiredCenterByUnitId.get(left.id) ?? 0;
     const rightDesiredCenter = desiredCenterByUnitId.get(right.id) ?? 0;
@@ -208,8 +245,12 @@ function placeUnits(units: LayoutUnit[], desiredCenters: number[]): void {
     nextLeft = left + unit.width + UNIT_GAP;
   }
 
-  const rowLeft = Math.min(...sortedUnits.map((unit) => unit.centerX - unit.width / 2));
-  const rowRight = Math.max(...sortedUnits.map((unit) => unit.centerX + unit.width / 2));
+  const rowLeft = Math.min(
+    ...sortedUnits.map((unit) => unit.centerX - unit.width / 2),
+  );
+  const rowRight = Math.max(
+    ...sortedUnits.map((unit) => unit.centerX + unit.width / 2),
+  );
   const offset = (rowLeft + rowRight) / 2;
 
   for (const unit of sortedUnits) {
@@ -223,8 +264,12 @@ function average(values: number[]): number {
 
 function getGenerationByPersonId(familyData: FamilyData): Map<string, number> {
   const generationByPersonId = new Map<string, number>();
-  const allChildIds = new Set(familyData.relationshipFacts.parentChild.map(({ childId }) => childId));
-  const rootIds = familyData.people.map((person) => person.id).filter((personId) => !allChildIds.has(personId));
+  const allChildIds = new Set(
+    familyData.relationshipFacts.parentChild.map(({ childId }) => childId),
+  );
+  const rootIds = familyData.people
+    .map((person) => person.id)
+    .filter((personId) => !allChildIds.has(personId));
 
   for (const personId of rootIds) {
     generationByPersonId.set(personId, 0);
@@ -238,24 +283,47 @@ function getGenerationByPersonId(familyData: FamilyData): Map<string, number> {
     changed = false;
     passCount += 1;
 
-    for (const { person1Id, person2Id } of familyData.relationshipFacts.partnerships) {
+    for (const { person1Id, person2Id } of familyData.relationshipFacts
+      .partnerships) {
       const person1Generation = generationByPersonId.get(person1Id);
       const person2Generation = generationByPersonId.get(person2Id);
-      const partnershipGeneration = Math.max(person1Generation ?? 0, person2Generation ?? 0);
+      const partnershipGeneration = Math.max(
+        person1Generation ?? 0,
+        person2Generation ?? 0,
+      );
 
-      if (setGenerationIfHigher(generationByPersonId, person1Id, partnershipGeneration)) {
+      if (
+        setGenerationIfHigher(
+          generationByPersonId,
+          person1Id,
+          partnershipGeneration,
+        )
+      ) {
         changed = true;
       }
 
-      if (setGenerationIfHigher(generationByPersonId, person2Id, partnershipGeneration)) {
+      if (
+        setGenerationIfHigher(
+          generationByPersonId,
+          person2Id,
+          partnershipGeneration,
+        )
+      ) {
         changed = true;
       }
     }
 
-    for (const { parentId, childId } of familyData.relationshipFacts.parentChild) {
+    for (const { parentId, childId } of familyData.relationshipFacts
+      .parentChild) {
       const parentGeneration = generationByPersonId.get(parentId) ?? 0;
 
-      if (setGenerationIfHigher(generationByPersonId, childId, parentGeneration + 1)) {
+      if (
+        setGenerationIfHigher(
+          generationByPersonId,
+          childId,
+          parentGeneration + 1,
+        )
+      ) {
         changed = true;
       }
     }
@@ -290,7 +358,9 @@ function getRelationshipLabel(focusView: FocusView, personId: string): string {
     return "Focus Person";
   }
 
-  const immediateRelationship = focusView.immediateFamily.find((item) => item.personId === personId);
+  const immediateRelationship = focusView.immediateFamily.find(
+    (item) => item.personId === personId,
+  );
   if (immediateRelationship) {
     return formatRelationship(immediateRelationship.relationship);
   }
@@ -299,5 +369,7 @@ function getRelationshipLabel(focusView: FocusView, personId: string): string {
     .flatMap((group) => group.people)
     .find((item) => item.personId === personId);
 
-  return cousinRelationship ? formatRelationship(cousinRelationship.relationship) : "Family Member";
+  return cousinRelationship
+    ? formatRelationship(cousinRelationship.relationship)
+    : "Family Member";
 }
